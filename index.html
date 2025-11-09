@@ -100,40 +100,88 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: linear-gradient(rgba(245, 241, 232, 0.9), rgba(245, 241, 232, 0.9)), 
-                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%232a2a2a" stroke-width="0.5" opacity="0.1"/></svg>');
+            background-color: var(--text-dark);
+            color: var(--beige-light);
             position: relative;
             overflow: hidden;
         }
         
-        .star-wars-intro {
+        .cinematic-intro {
             position: relative;
             height: 100vh;
             width: 100%;
-            perspective: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
         
-        .crawl {
-            position: absolute;
-            top: 0;
-            left: 15%;
-            width: 70%;
-            font-size: 300%;
-            text-align: justify;
-            transform-origin: 50% 100%;
-            animation: crawl 60s linear;
+        .intro-title {
+            font-size: 72px;
+            opacity: 0;
+            transform: scale(1.5);
+            animation: titleReveal 2s forwards;
         }
         
-        @keyframes crawl {
+        .intro-text {
+            position: relative;
+            font-size: 24px;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .intro-text:nth-child(2) { animation: textReveal 0.8s forwards 1s; }
+        .intro-text:nth-child(3) { animation: textReveal 0.8s forwards 1.5s; }
+        .intro-text:nth-child(4) { animation: textReveal 0.8s forwards 2s; }
+        
+        @keyframes titleReveal {
             0% {
-                top: 100vh;
-                transform: rotateX(20deg) translateZ(0);
+                opacity: 0;
+                transform: scale(1.5);
             }
             100% {
-                top: -500vh;
-                transform: rotateX(25deg) translateZ(-1000px);
+                opacity: 1;
+                transform: scale(1);
             }
+        }
+        
+        @keyframes textReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .glitch-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            animation: glitch 0.6s infinite;
+            opacity: 0.5;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-1px); }
+            100% { transform: translateX(0); }
         }
         
         .enter-btn {
@@ -360,17 +408,14 @@
 
     <!-- SÉQUENCE 0 - GÉNÉRIQUE D'OUVERTURE -->
     <section id="sequence-0">
-        <div class="star-wars-intro">
-            <div class="crawl">
-                <h1>MON PORTFOLIO</h1>
-                <p>Il y a bien longtemps, dans une galaxie pas si lointaine...</p>
-                <p>Un créatif passionné par l'univers cinématographique a décidé de concevoir son portfolio comme une expérience immersive.</p>
-                <p>À travers ces pages, vous découvrirez des projets soigneusement sélectionnés, des explorations visuelles et des réflexions personnelles.</p>
-                <p>Chaque section a été pensée comme une séquence de film, avec son propre rythme et son ambiance.</p>
-                <p>Préparez-vous à plonger dans mon univers créatif...</p>
-            </div>
+        <div class="glitch-overlay"></div>
+        <div class="cinematic-intro">
+            <h1 class="intro-title">PORTFOLIO CINÉMATOGRAPHIQUE</h1>
+            <p class="intro-text">Bienvenue dans mon univers visuel</p>
+            <p class="intro-text">Une exploration de la narration par l'image</p>
+            <p class="intro-text">Où chaque projet raconte une histoire unique</p>
         </div>
-        <button class="enter-btn" onclick="scrollToSequence(1)">Entrer dans mes yeux</button>
+        <button class="enter-btn" onclick="scrollToSequence(1)">Commencer l'expérience</button>
     </section>
 
     <!-- SÉQUENCE 1 - PROJETS -->
@@ -518,7 +563,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sequence0.style.transition = "opacity 2.5s ease";
         sequence0.style.opacity = "0";
 
-        console.log(`Transition vers la séquence ${sequenceNumber}`);
+        console.log(`Transition vers la séquence ${sequenceNumber}`);   
         // Scroll fluide après le fondu
         setTimeout(() => {
             document.getElementById(`sequence-${sequenceNumber}`).scrollIntoView({
