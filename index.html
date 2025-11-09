@@ -71,14 +71,37 @@
             margin: 0 auto;
         }
         
-        /* Navigation */
+        /* Masquer toutes les sections sauf l'intro au départ */
+        #sequence-1,
+        #sequence-2,
+        #sequence-3,
+        #sequence-4,
+        #sequence-5 {
+            display: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        
+        .content-visible {
+            display: block !important;
+            opacity: 1 !important;
+        }
+        
+        /* Navigation - cachée au départ */
         nav {
             position: fixed;
             top: 0;
             right: 0;
             z-index: 1000;
             padding: 2rem;
-            transition: transform 0.5s ease;
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(-100%);
+        }
+        
+        nav.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         nav.hidden {
@@ -133,11 +156,12 @@
             position: relative;
             overflow: hidden;
             padding-bottom: 10%;
+            height: 100vh;
         }
         
         .cinematic-intro {
             position: relative;
-            height: 100vh;
+            height: 100%;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -635,7 +659,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Navigation - cachée au départ -->
     <nav id="main-nav">
         <ul>
             <li><a href="#sequence-1">Séquence 1</a></li>
@@ -653,11 +677,11 @@
         <div class="particles" id="particles-0"></div>
         <div class="cinematic-intro">
             <h1 class="intro-title">PORTFOLIO Louis</h1>
-            <p class="intro-text">Texte à trouver</p>
-            <p class="intro-text">Texte à trouver</p>
-            <p class="intro-text">Texte à trouver</p>
+            <p class="intro-text">Bienvenue dans mon univers cinématographique</p>
+            <p class="intro-text">Découvrez mes créations visuelles et narratives</p>
+            <p class="intro-text">Une expérience immersive vous attend</p>
         </div>
-        <button class="enter-btn" onclick="scrollToSequence(1)">Commencer l'expérience</button>
+        <button class="enter-btn" onclick="revealContent()">Commencer l'expérience</button>
     </section>
 
     <!-- SÉQUENCE 1 - PROJETS -->
@@ -671,19 +695,19 @@
                     <div class="project-media">VIDÉO / EXTRAIT</div>
                     <h3>Projet Récent</h3>
                     <p>Court-métrage expérimental - 12 min</p>
-                    <p>Texte à trouver</p>
+                    <p>Une exploration des frontières entre rêve et réalité</p>
                 </div>
                 <div class="project-card">
                     <div class="project-media">PHOTOS DE TOURNAGE</div>
                     <h3>Projet Marquants</h3>
                     <p>Série documentaire - 45 min</p>
-                    <p>Texte à trouver</p>
+                    <p>Portrait intime d'une communauté méconnue</p>
                 </div>
                 <div class="project-card">
                     <div class="project-media">CROQUIS / STORYBOARD</div>
                     <h3>Origines</h3>
                     <p>Premier court-métrage - 8 min</p>
-                    <p>Texte à trouver</p>
+                    <p>L'humain face à la technologie</p>
                 </div>
             </div>
         </div>
@@ -758,17 +782,17 @@
                 <div class="journal-entry">
                     <div class="entry-date">15 mars 2023</div>
                     <h3>Critique : A Star Is Born</h3>
-                    <p>Texte à trouver</p>
+                    <p>Une réflexion sur la célébrité et l'authenticité dans l'industrie musicale</p>
                 </div>
                 <div class="journal-entry">
                     <div class="entry-date">8 mars 2023</div>
                     <h3>Inspiration : La photographie argentique</h3>
-                    <p>Texte à trouver</p>
+                    <p>Retour aux sources avec la découverte du travail de Saul Leiter</p>
                 </div>
                 <div class="journal-entry">
                     <div class="entry-date">1 mars 2023</div>
                     <h3>Réflexion : Narration non-linéaire</h3>
-                    <p>Texte à trouver</p>
+                    <p>Comment raconter une histoire sans suivre la chronologie traditionnelle</p>
                 </div>
             </div>
         </div>
@@ -835,23 +859,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- FONCTION : transition cinématique vers la séquence suivante
-    function scrollToSequence(sequenceNumber) {
+    // --- FONCTION : Révéler tout le contenu
+    function revealContent() {
         if (hasEntered) return;
         hasEntered = true;
 
-        // Effet de fondu au noir progressif
-        sequence0.style.transition = "opacity 2.5s ease";
+        // Effet de fondu sur l'intro
+        sequence0.style.transition = "opacity 2s ease";
         sequence0.style.opacity = "0";
 
-        console.log(`Transition vers la séquence ${sequenceNumber}`);   
-        // Scroll fluide après le fondu
+        // Révéler la navigation
+        nav.classList.add('visible');
+
+        // Révéler toutes les autres sections après le fondu
         setTimeout(() => {
-            document.getElementById(`sequence-${sequenceNumber}`).scrollIntoView({
-                behavior: "smooth"
-            });
+            // Masquer complètement l'intro
             sequence0.style.display = "none";
-        }, 2500);
+            
+            // Révéler toutes les autres sections
+            for (let i = 1; i <= 5; i++) {
+                const section = document.getElementById(`sequence-${i}`);
+                if (section) {
+                    section.classList.add('content-visible');
+                }
+            }
+            
+            // Scroll vers le haut pour voir la première section
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 2000);
     }
 
     // --- FONCTION : effet de fondu final (crédits)
@@ -884,13 +919,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     font-size: 24px;
                     letter-spacing: 2px;">
                     🎬 Merci d'avoir visionné ce portfolio 🎬<br><br>
-                    <span style="font-size:16px; opacity:0.8;">Réalisation : Leon Cosmos</span>
+                    <span style="font-size:16px; opacity:0.8;">Réalisation : Louis</span>
                 </div>`;
         }, 2000);
     }
 
     // --- Gestion de la navigation cachée lors du défilement
     window.addEventListener("scroll", () => {
+        if (!hasEntered) return;
+        
         if (window.scrollY > lastScrollY && window.scrollY > 100) {
             // Défilement vers le bas
             nav.classList.add("hidden");
@@ -902,17 +939,8 @@ document.addEventListener("DOMContentLoaded", () => {
         lastScrollY = window.scrollY;
     });
 
-    // --- Effet de parallaxe sur la séquence 0
-    window.addEventListener("scroll", () => {
-        if (sequence0.style.display !== "none") {
-            const scrolled = window.scrollY * 0.3;
-            sequence0.style.transform = `translateY(${scrolled}px) scale(1.02)`;
-            sequence0.style.transition = "transform 0.1s linear";
-        }
-    });
-
     // Rendre accessible la fonction dans le HTML inline
-    window.scrollToSequence = scrollToSequence;
+    window.revealContent = revealContent;
     window.fadeToBlack = fadeToBlack;
 });
 </script>
