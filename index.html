@@ -845,7 +845,6 @@ body.content-revealed {
                 <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
                 <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
             </div>
-            <button class="enter-btn" onclick="fadeToBlack()">Fermer</button>
         </div>
     </section>
 
@@ -924,42 +923,6 @@ function revealContent() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, 2000);
 }
-
-    // --- FONCTION : effet de fondu final (crédits)
-    function fadeToBlack() {
-        document.body.classList.add("fade-out");
-        const overlay = document.createElement("div");
-        overlay.style.position = "fixed";
-        overlay.style.top = 0;
-        overlay.style.left = 0;
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.backgroundColor = "#000";
-        overlay.style.zIndex = 9999;
-        overlay.style.opacity = 0;
-        overlay.style.transition = "opacity 2.5s ease";
-        document.body.appendChild(overlay);
-
-        requestAnimationFrame(() => (overlay.style.opacity = 1));
-
-        setTimeout(() => {
-            overlay.innerHTML = `
-                <div style="
-                    color: #f5f1e8;
-                    font-family: 'Cinzel', serif;
-                    text-align: center;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    font-size: 24px;
-                    letter-spacing: 2px;">
-                    🎬 Merci d'avoir visionné ce portfolio 🎬<br><br>
-                    <span style="font-size:16px; opacity:0.8;">Réalisation : Louis</span>
-                </div>`;
-        }, 2000);
-    }
-
     // --- Gestion de la navigation cachée lors du défilement
     window.addEventListener("scroll", () => {
         if (!hasEntered) return;
@@ -977,7 +940,6 @@ function revealContent() {
 
     // Rendre accessible la fonction dans le HTML inline
     window.revealContent = revealContent;
-    window.fadeToBlack = fadeToBlack;
 });
 </script>
 
