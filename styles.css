@@ -2324,7 +2324,7 @@
     }
 }
 
-/* Styles pour les lecteurs vidéo */
+/* Styles responsives pour les lecteurs vidéo */
 .video-container {
     display: flex;
     flex-direction: column;
@@ -2347,6 +2347,7 @@
 
 .video-info {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
@@ -2355,12 +2356,23 @@
 .video-info i {
     font-size: 1.5rem;
     color: var(--gold);
+    flex-shrink: 0;
 }
 
 .video-info h4 {
     color: var(--beige-light);
     margin: 0;
     font-size: 1.1rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.video-format {
+    color: rgba(245, 241, 232, 0.7);
+    font-size: 0.9rem;
+    margin: 0;
+    flex-basis: 100%;
+    margin-top: 0.5rem;
 }
 
 .video-wrapper {
@@ -2372,82 +2384,122 @@
     background: #000;
 }
 
-.custom-video {
+.native-video {
     width: 100%;
     height: auto;
     border-radius: 8px;
     display: block;
-}
-
-/* Masquer les contrôles natifs de la vidéo pour utiliser les nôtres */
-.custom-video::-webkit-media-controls {
-    display: none !important;
-}
-
-.custom-video {
-    -webkit-appearance: none;
-}
-
-.video-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.video-btn {
-    background: rgba(212, 175, 55, 0.2);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.video-btn:hover {
-    background: var(--gold);
-    color: var(--text-dark);
-    transform: scale(1.1);
+    max-width: 100%;
 }
 
 /* Plein écran */
-.video-wrapper.fullscreen-active {
-    position: fixed;
-    top: 0;
-    left: 0;
+.video-wrapper:fullscreen {
     width: 100vw;
     height: 100vh;
-    z-index: 100000;
     background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.video-wrapper.fullscreen-active .custom-video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+.video-wrapper:fullscreen .native-video {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 
-/* Responsive pour vidéo */
+/* RESPONSIVE MOBILE */
 @media (max-width: 768px) {
-    .video-controls {
-        flex-wrap: wrap;
-        gap: 0.8rem;
-    }
-    
-    .progress-container {
-        flex: 1;
-        min-width: 150px;
+    .video-container {
+        gap: 1.5rem;
+        margin-top: 1rem;
     }
     
     .video-player {
-        padding: 1.2rem;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+    
+    .video-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .video-info h4 {
+        min-width: auto;
+        font-size: 1rem;
+        text-align: left;
+    }
+    
+    .video-info i {
+        font-size: 1.3rem;
+    }
+    
+    .video-format {
+        font-size: 0.8rem;
+        flex-basis: auto;
+        margin-top: 0;
+    }
+    
+    .native-video {
+        border-radius: 6px;
     }
 }
 
-.native-video{
-    width: 90%;
+@media (max-width: 480px) {
+    .video-player {
+        padding: 0.8rem;
+    }
+    
+    .video-info {
+        gap: 0.5rem;
+    }
+    
+    .video-info h4 {
+        font-size: 0.95rem;
+    }
+    
+    .video-container {
+        gap: 1rem;
+    }
+    
+    /* Amélioration du plein écran sur mobile */
+    .native-video {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Support tactile amélioré */
+@media (hover: none) and (pointer: coarse) {
+    .video-player:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .video-format {
+        content: "Format: MP4 - Double-tap pour plein écran";
+    }
+}
+
+/* Correction pour iOS */
+@supports (-webkit-touch-callout: none) {
+    .native-video {
+        /* Correction pour Safari iOS */
+        -webkit-transform: translateZ(0);
+    }
+    
+    .video-wrapper {
+        -webkit-perspective: 1000;
+        -webkit-backface-visibility: hidden;
+    }
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    .video-player {
+        transition: none;
+    }
 }
